@@ -31,15 +31,11 @@ public class ReportService {
             long startTime = System.currentTimeMillis();
             Report report = reportRepository.findById(reportId).orElseThrow();
             try {
-                // Поток 1 – количество пользователей
                 CompletableFuture<Long> userCountFuture = CompletableFuture.supplyAsync(() -> {
-                    // Симуляция подсчёта пользователей
-                    return 42L; // заглушка
+                    return 42L;
                 });
 
-                // Поток 2 – список объектов
                 CompletableFuture<List<String>> dataFuture = CompletableFuture.supplyAsync(() -> {
-                    // Симуляция получения данных
                     return List.of("Object A", "Object B");
                 });
 
@@ -48,7 +44,6 @@ public class ReportService {
 
                 long elapsed = System.currentTimeMillis() - startTime;
 
-                // Составляем отчёт
                 StringBuilder content = new StringBuilder();
                 content.append("User count: ").append(userCount).append("\n");
                 content.append("Objects: ").append(String.join(", ", dataList)).append("\n");
@@ -69,7 +64,7 @@ public class ReportService {
     public void generateReportAsync(Long reportId) {
         Report report = reportRepository.findById(reportId).orElseThrow();
         try {
-            Thread.sleep(1000); // эмуляция долгой генерации
+            Thread.sleep(1000);
             report.setContent("Сформированный отчет #" + reportId);
             report.setStatus(ReportStatus.COMPLETED);
         } catch (Exception e) {
